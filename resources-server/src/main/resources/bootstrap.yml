@@ -6,6 +6,17 @@ spring:
     user:
       name: user
       password: admin
+  # 数据库配置
+  datasource:
+    name: resources
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/mybatis?useSSL=false
+    username: root
+    password: malin
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
 server:
   port: 8989
 # 服务开始注册到eureka中心里面
