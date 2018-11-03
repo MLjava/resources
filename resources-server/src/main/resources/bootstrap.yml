@@ -1,0 +1,37 @@
+auth-server: http://localhost:7777 # 认证服务器地址
+spring:
+  application:
+    name: resources
+  security:
+    user:
+      name: user
+      password: admin
+server:
+  port: 8989
+# 服务开始注册到eureka中心里面
+eureka:
+  client:
+    service-url:
+      defaultZone: http://172.23.216.152:8761/eureka, http://172.23.216.153:8761/eureka, http://172.23.216.154:8761/eureka
+      healthcheck: true
+  instance:
+    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 10
+    # 这个必须使用true
+    prefer-ip-address: true
+    instance-id: http://127.0.0.1:${server.port}
+security:
+  oauth2:
+    client:
+      # 授权服务器配置的client id
+      client-id: client
+      # 授权服务器配置的client secret
+      client-secret: secret
+      scope: app
+      # 获取access token接口
+      access-token-uri: ${auth-server}/oauth/token
+      #  获取Authorization Code接口
+      user-authorization-uri: ${auth-server}/oauth/authorize
+    resource:
+      # 验证token的接口
+      token-info-uri: ${auth-server}/oauth/check_token
