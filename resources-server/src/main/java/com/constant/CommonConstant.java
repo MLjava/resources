@@ -12,9 +12,12 @@ public interface CommonConstant {
      */
     Integer REQUEST_OK = 200;
 
+    Integer AUTHORIZATION_FAILURE = 401;
+
     interface Message {
 
         String REQUEST_OK_MESSAGE = "请求成功";
 
+        String AUTHORIZATION_FAILURE_MESSAGE = "没有权限访问";
     }
 }

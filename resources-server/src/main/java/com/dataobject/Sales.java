@@ -1,6 +1,7 @@
-package com.pojo;
+package com.dataobject;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,23 +9,23 @@ import javax.persistence.Id;
 
 /**
  * @author：linma
- * @date: 2018/11/3 14:06
+ * @date: 2018/11/21 14:37
  * @email: linma@homeinns.com
  **/
-@Data
 @Entity
+@Data
 public class Sales {
 
     @Id
-    @GeneratedValue
+    @GenericGenerator(name = "id", strategy = "uuid")
+    @GeneratedValue(generator = "id")
     private String id;
 
     private String salesName;
 
-    private String saleSex;
-
     private Integer salesAge;
 
-    private Integer productId;
+    private String salesSex;
 
+    private String productId;
 }

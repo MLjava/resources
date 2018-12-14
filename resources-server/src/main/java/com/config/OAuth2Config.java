@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  **/
 @Configuration
 @Slf4j
-public class Oauth2Config extends ResourceServerConfigurerAdapter {
+public class OAuth2Config extends ResourceServerConfigurerAdapter {
 
     @Autowired
     private ResourceServerProperties resourceServerProperties;
@@ -37,7 +38,13 @@ public class Oauth2Config extends ResourceServerConfigurerAdapter {
         return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+    @Autowired
+    private OAuth2EntryPoint oAuth2EntryPoint;
+
+    @Autowired
+    private OAuth2Handler oAuth2Handler;
+
+    private JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         //设置用于解码的非对称加密的公钥
         converter.setVerifierKey(getPubKey());
@@ -67,4 +74,12 @@ public class Oauth2Config extends ResourceServerConfigurerAdapter {
         return null;
     }
 
+    @Override
+    public void configure(ResourceServerSecurityConfigurer
+                                      resources) throws Exception {
+        //添加OAuth2异常显示自定义处理
+            resources
+                    .accessDeniedHandler(oAuth2Handler)
+                    .authenticationEntryPoint(oAuth2EntryPoint);
+    }
 }
